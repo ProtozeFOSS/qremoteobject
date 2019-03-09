@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>keyfob.png</file>
+        <file>Keyfob.qml</file>
+    </qresource>
+</RCC>

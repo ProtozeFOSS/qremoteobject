@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>pace-family-overhead-tease.png</file>
+        <file>Car.qml</file>
+    </qresource>
+</RCC>

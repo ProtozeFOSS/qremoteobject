@@ -238,9 +238,10 @@ QVariant QREMOTEOBJECT::executeMappedInvoke(QObject* object, int method_index, c
     return ret_val;
 }
 
-
+// TODO: implement returns, yeah its not quite signal/slots like but it is possible
 void QREMOTEOBJECT::notifyRemoteReturnValue(const QObject& object, int id, void** return_value)
 {
+    Q_UNUSED(object) Q_UNUSED(id) Q_UNUSED(return_value)
    /* const QMetaObject* meta = object->metaObject();
     // meta->superClass will be QRemoteObject
     QMetaMethod notify_method(meta->superClass()->method(meta->superClass()->methodOffset())); // notify method takes a string func_name and QVariant return_value
@@ -320,7 +321,7 @@ QByteArray QREMOTEOBJECT::Q_EncodeMetaProperty(const QObject &object, int id, QM
     QMetaType::save(ss,QMetaType::Int,&id);        // method id
     if(c == QMetaObject::WriteProperty)
     {
-        if(QMetaType::QByteArray == p.type())
+        if(int(QMetaType::QByteArray) == int(p.type()))
         {
             QByteArray* array = static_cast<QByteArray*>(params[1]);
             int length =array->length();

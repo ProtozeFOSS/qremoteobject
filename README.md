@@ -9,6 +9,6 @@ Remote object library that utilizes the built-in signal/slot structure of Qt
 
 # To Build
 
-Pull the repository
-open either qremoteobject.qbs or one of the example's top level qbs file in Qt Creator.
-build and (run if example) as usual
+ - Pull the repository
+ - open either qremoteobject.qbs or one of the example's top level qbs file in Qt Creator.
+ - build and (run if example) as usual

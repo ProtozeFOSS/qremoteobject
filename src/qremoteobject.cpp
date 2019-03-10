@@ -70,12 +70,13 @@ void  QRemoteObject::qt_remote_metacall(QObject* obj, QMetaObject::Call _c, int 
     }
 }
 
-void QRemoteObject::processNotification(QByteArray notification)
+void QRemoteObject::processNotification(const QByteArray & notification)
 {
     void ** params;
     int c_val(-1);
     int id(-1);
-    QDataStream ds(&notification,QIODevice::ReadOnly);
+    QByteArray data_copy(notification);
+    QDataStream ds(&data_copy,QIODevice::ReadOnly);
     ds.setVersion(QDataStream::Qt_5_10);
     ds >> c_val;
     ds >> id;
@@ -84,8 +85,8 @@ void QRemoteObject::processNotification(QByteArray notification)
         case QMetaObject::InvokeMetaMethod:
         case QMetaObject::RemoteInvokeMetaMethod:
         {
-            notification.remove(0,sizeof(int)*2);
-            QMetaMethod method(QREMOTEOBJECT::Q_DecodeMethodCall((*this),id,params,notification));
+            data_copy.remove(0,sizeof(int)*2);
+            QMetaMethod method(QREMOTEOBJECT::Q_DecodeMethodCall((*this),id,params,data_copy));
             if(id > 0 ){
                 id -= this->metaObject()->methodOffset();
                 qt_metacall(QMetaObject::RemoteInvokeMetaMethod, id,params);
@@ -95,7 +96,7 @@ void QRemoteObject::processNotification(QByteArray notification)
         }
         case QREMOTEOBJECT::RpcCall::ReturnInvokeMethod:
         {
-            QMetaMethod method(QREMOTEOBJECT::Q_DecodeMethodCall((*this),id,params,notification));
+            QMetaMethod method(QREMOTEOBJECT::Q_DecodeMethodCall((*this),id,params,data_copy));
             QREMOTEOBJECT::notifyRemoteReturnValue(*this,id,params);
             break;
         }
@@ -120,8 +121,8 @@ void QRemoteObject::processNotification(QByteArray notification)
         case QREMOTEOBJECT::RpcCall::Construct:
         {
           // decode right here
-          notification.remove(0,sizeof(int)*2);
-          QJsonDocument doc = QJsonDocument::fromBinaryData(notification);
+          data_copy.remove(0,sizeof(int)*2);
+          QJsonDocument doc = QJsonDocument::fromBinaryData(data_copy);
           QJsonObject reflection = doc.object();
           this->fromReflection(reflection);
           break;

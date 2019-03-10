@@ -30,7 +30,7 @@ signals:
     void dispatchNotification(QByteArray notification);
 
 public slots:
-    void processNotification(QByteArray notification);
+    void processNotification(const QByteArray &notification);
     void remoteInvokeMethod(QByteArray signature, QVariantList params);
     void initializeRemote();
 

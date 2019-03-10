@@ -10,6 +10,18 @@ Rectangle{
         fillMode:Image.PreserveAspectFit
         source:"qrc:/keyfob.png"
     }
+    Text{
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top:parent.top
+        anchors.topMargin:parent.height*.05
+        color:"lightblue"
+        text:keyID
+        font.family: "Noto Sans Mono CJK JP Bold"
+        horizontalAlignment: Text.AlignHCenter
+        font.bold:true
+        font.pixelSize: parent.width/6
+    }
+
     Rectangle{
         border.color: "white"
         border.width: 1

@@ -11,15 +11,6 @@ Window {
     Keyfob{
         id:keyfob
         anchors.fill: parent
-        keyID:"B2C3"
-    }
-    Connections{
-        target:CarConnection
-        onConnected:{
-            console.log("Connected to car server");
-            KeyfobObject.connectFob(keyfob.keyID);
-        }
-
     }
     Connections{
         target:KeyfobObject
@@ -39,7 +30,35 @@ Window {
         onKeyLockedOut:{
             if(keyfob.keyID == key_id){
                 console.log("Keyfob locked out for reason: " + reason)
+                lockOutScreen.visible = true;
             }
+        }
+    }
+
+    InitializeMenu{
+        id:initializeMenu
+        anchors.fill: parent
+        onInitializeSystem:{
+            keyfob.keyID = initializeMenu.keyIdInput.text.toUpperCase()
+            initializeMenu.enabled = false;
+            initializeMenu.visible = false;
+            KeyfobObject.connectFob(keyfob.keyID);
+        }
+    }
+
+    Rectangle{
+        id:lockOutScreen
+        color: "#e60a0a0a"
+        anchors.fill: parent
+        visible:false
+        Text{
+            text:"Invalid Key ID\nSystem Lockout"
+            color:"white"
+            font.pixelSize: 24
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
         }
     }
 

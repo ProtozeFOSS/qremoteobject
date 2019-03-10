@@ -3,5 +3,6 @@
         <file>main.qml</file>
         <file>keyfob.png</file>
         <file>Keyfob.qml</file>
+        <file>InitializeMenu.qml</file>
     </qresource>
 </RCC>

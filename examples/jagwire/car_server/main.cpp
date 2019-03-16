@@ -4,6 +4,8 @@
 #include <QWebSocket>
 #include <QMap>
 #include <QQmlContext>
+#include <QFile>
+
 
 constexpr quint16  KEY_SERVER_PORT = 4421;
 constexpr char KEY_SERVER_ADDR[] = "127.0.0.1";

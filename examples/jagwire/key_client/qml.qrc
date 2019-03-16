@@ -4,5 +4,9 @@
         <file>keyfob.png</file>
         <file>Keyfob.qml</file>
         <file>InitializeMenu.qml</file>
+        <file>locked.svg</file>
+        <file>high-beam.svg</file>
+        <file>trunk.svg</file>
+        <file>unlocked.svg</file>
     </qresource>
 </RCC>

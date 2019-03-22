@@ -8,6 +8,7 @@ Rectangle{
     property bool doorsLocked:false
     property bool trunkPopped:false
     property bool fogLightsOn:false
+    property bool alarmActive:false
     Image{
         id:fobImage
         anchors.fill: parent
@@ -160,6 +161,42 @@ Rectangle{
                 onClicked: {
                     if(keyFobConnected){
                         KeyfobObject.popTrunk(fob.keyID);
+                    }
+                }
+            }
+        }
+        Rectangle{
+            id:alarmButton
+            color:"#2e2e2e"
+            anchors.bottom:parent.bottom
+            anchors.bottomMargin:parent.height*.12
+            height:parent.height *.25
+            anchors.left: lockButton.horizontalCenter
+            anchors.right: unlockButton.horizontalCenter
+            radius:16
+            Image{
+                anchors.fill: parent
+                anchors.rightMargin: 10
+                anchors.leftMargin:14
+                anchors.topMargin:12
+                anchors.bottomMargin:12
+                source:"qrc:/alarm.svg"
+            }
+            Rectangle{
+                width:parent.width/4
+                height:width
+                anchors.top:parent.bottom
+                anchors.topMargin: -4
+                anchors.horizontalCenter: parent.horizontalCenter
+                color: fob.alarmActive ? "#00a20d":"#3a3a3a"
+                radius:width/2
+            }
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    if(keyFobConnected){
+                        console.log("toggling alarm")
+                        KeyfobObject.toggleAlarm(fob.keyID);
                     }
                 }
             }

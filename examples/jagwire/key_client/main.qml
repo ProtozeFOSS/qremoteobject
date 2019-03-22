@@ -40,9 +40,9 @@ Window {
         onLightsChanged:{
             keyfob.fogLightsOn = light_state;
             if(light_state === true){
-                console.log("Recieved confirmation car is locked")
+                console.log("Recieved confirmation on lights ON")
             }else{
-                console.log("Recieved confirmation car is unlocked")
+                console.log("Recieved confirmation on lights OFF")
             }
         }
         onTrunkChanged:{
@@ -52,7 +52,14 @@ Window {
             }else{
                 console.log("Recieved confirmation trunk closed")
             }
-
+        }
+        onAlarmChanged:{
+            keyfob.alarmActive = alarm_state;
+            if(alarm_state === true){
+                console.log("Recieved confirmation Activated Alarm")
+            }else{
+                console.log("Recieved confirmation Deactivated Alarm")
+            }
         }
     }
 
@@ -83,14 +90,16 @@ Window {
         }
     }
 
-    // resizing (jitter)
+    // resizing but maintaining correct aspect ratio
     onWidthChanged: {
-        if(!resizedWidth){
+        if(!resizedWidth && !resizedHeight){
+            resizedWidth = true;
             resizeFob.start();
         }
     }
     onHeightChanged: {
-       if(!resizedHeight){
+       if(!resizedHeight && !resizedWidth){
+           resizedHeight = true;
            resizeFob.start();
        }
     }
@@ -108,12 +117,14 @@ Window {
         repeat: false
         interval:1
         onTriggered:{
-                resizedHeight = true;
-                resizedWidth = true;
+            if(resizedHeight){
+                window.width = window.height*0.61202191
+                window.height = window.width*1.6339291
+            }else{
                 window.height = window.width*1.6339291
                 window.width = window.height*0.61202191
-                doneResizing.start();
-
+            }
+            doneResizing.start();
         }
     }
 }

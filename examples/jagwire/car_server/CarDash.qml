@@ -3,10 +3,22 @@ import QtQuick.Shapes 1.12
 Rectangle {
     color:"transparent"
     signal openActionsMenu()
+    property bool alarmTransitionState: false
     function closeTrunk(){
         KeyfobInput.setTrunkState(false);
         trunkIcon.color = "#e6ff5555";
         trunkText.text = "Trunk Closed"
+    }
+    function validateKeyfob(fob_id){
+        var index=0;
+        var valid=false;
+        for(index; index <ValidKeyfobs.length; ++index){
+            if(ValidKeyfobs[index] === fob_id){
+                valid = true;
+                break;
+            }
+        }
+        return valid;
     }
 
     // define UX for car display
@@ -131,7 +143,7 @@ Rectangle {
         Rectangle{
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: 4
+            anchors.bottomMargin: parent.height*.018
             height:parent.height/6
             radius:16
             width:parent.width/6
@@ -152,72 +164,123 @@ Rectangle {
                 }
             }
         }
+        Rectangle{
+          id:alarmNotifier
+          anchors.horizontalCenter: parent.horizontalCenter
+          anchors.verticalCenter: parent.verticalCenter
+          anchors.verticalCenterOffset: parent.height * .15
+          width:parent.width/4
+          height:width/3
+          radius:height/2
+          color:"red"
+          opacity: 0
+          Text{
+              anchors.fill: parent
+              anchors.margins: parent.radius
+              text:"Alarm Active"
+              horizontalAlignment: Text.AlignHCenter
+              verticalAlignment: Text.AlignVCenter
+              color:"white"
+              visible:parent.opacity >= 0.5
+          }
+          Behavior on opacity{
+              NumberAnimation{
+                  duration: 1000
+              }
+          }
+        }
     }
-
+    Timer{
+        id:alarmTimer
+        interval:1000
+        repeat:true
+        running:false
+        onTriggered: {
+            KeyfobInput.setLightState(!KeyfobInput.lightState)
+            if(KeyfobInput.lightState){
+                lightIcon.color = "#00ddff"
+                lightText.text = "Lights ON"
+            }else{
+                lightIcon.color = "#e6ff5555"
+                lightText.text = "Lights OFF"
+            }
+            alarmTransitionState = !alarmTransitionState;
+            if(alarmTransitionState){
+                alarmNotifier.opacity = .2;
+            }else{
+                alarmNotifier.opacity = 1.0;
+            }
+        }
+        onRunningChanged: {
+            if(!running){
+                alarmNotifier.opacity = 0;
+                KeyfobInput.setLightState(false)
+                lightIcon.color = "#e6ff5555"
+                lightText.text = "Lights OFF"
+            }
+        }
+    }
 
     Connections{
         target:KeyfobInput
         onConnectFob:{
-            var index=0;
-            for(index; index <ValidKeyfobs.length; ++index){
-                if(ValidKeyfobs[index] === key_id){
-                    console.log("Keyfob: " + key_id + " Connected!");
-                    KeyfobInput.fobConnected(key_id);
-                    return;
-                }
+            if(validateKeyfob(key_id)){
+                console.log("Keyfob: " + key_id + " Connected!");
+                KeyfobInput.fobConnected(key_id);
+            }else{
+                KeyfobInput.keyLockedOut(key_id,"Keyfob does not match make and model: (DENIED)");
             }
-            KeyfobInput.keyLockedOut(key_id,"Keyfob does not match make and model: (DENIED)");
 
         }
         onLock:{
-            var index=0;
-            for(index; index <ValidKeyfobs.length; ++index){
-                if(ValidKeyfobs[index] === key_id){
-                    console.log("Keyfob: " + key_id + " locked vehicle!");
-                    KeyfobInput.setLockState(true);
-                    lockShape.source = "qrc:/locked.svg"
-                    lockIcon.color = "#00ddff"
-                    lockText.text = "Doors Locked"
-                }
+            if(validateKeyfob(key_id)){
+                console.log("Keyfob: " + key_id + " locked vehicle!");
+                KeyfobInput.setLockState(true);
+                lockShape.source = "qrc:/locked.svg"
+                lockIcon.color = "#00ddff"
+                lockText.text = "Doors Locked"
             }
         }
         onUnlock:{
-            var index=0;
-            for(index; index <ValidKeyfobs.length; ++index){
-                if(ValidKeyfobs[index] === key_id){
-                    console.log("Keyfob: " + key_id + " unlocked vehicle!");
-                    KeyfobInput.setLockState(false);
-                    lockShape.source = "qrc:/unlocked.svg"
-                    lockIcon.color = "#e6ff5555"
-                    lockText.text = "Doors Unlocked"
-                }
+            if(validateKeyfob(key_id)){
+                console.log("Keyfob: " + key_id + " unlocked vehicle!");
+                KeyfobInput.setLockState(false);
+                lockShape.source = "qrc:/unlocked.svg"
+                lockIcon.color = "#e6ff5555"
+                lockText.text = "Doors Unlocked"
             }
         }
         onPopTrunk:{
-            var index=0;
-            for(index; index <ValidKeyfobs.length; ++index){
-                if(ValidKeyfobs[index] === key_id){
-                    console.log("Keyfob: " + key_id + " popping trunk!");
-                    trunkIcon.color = "#00ddff"
-                    trunkText.text = "Trunk Open"
-                    KeyfobInput.setTrunkState(true)
-                }
+            if(validateKeyfob(key_id)){
+                console.log("Keyfob: " + key_id + " popping trunk!");
+                trunkIcon.color = "#00ddff"
+                trunkText.text = "Trunk Open"
+                KeyfobInput.setTrunkState(true)
             }
         }
         onToggleLights:{
-            var index=0;
-            for(index; index <ValidKeyfobs.length; ++index){
-                if(ValidKeyfobs[index] === key_id){
-                    KeyfobInput.setLightState(!KeyfobInput.lightState)
-                    if(KeyfobInput.lightState){
-                        console.log("Keyfob: " + key_id + " toggle lights ON!");
-                        lightIcon.color = "#00ddff"
-                        lightText.text = "Lights ON"
-                    }else{
-                        console.log("Keyfob: " + key_id + " toggle lights OFF!");
-                        lightIcon.color = "#e6ff5555"
-                        lightText.text = "Lights OFF"
-                    }
+            if(validateKeyfob(key_id)){
+                KeyfobInput.setLightState(!KeyfobInput.lightState)
+                if(KeyfobInput.lightState){
+                    console.log("Keyfob: " + key_id + " toggle lights ON!");
+                    lightIcon.color = "#00ddff"
+                    lightText.text = "Lights ON"
+                }else{
+                    console.log("Keyfob: " + key_id + " toggle lights OFF!");
+                    lightIcon.color = "#e6ff5555"
+                    lightText.text = "Lights OFF"
+                }
+            }
+        }
+        onToggleAlarm:{
+            if(validateKeyfob(key_id)){
+                KeyfobInput.setAlarmState(!KeyfobInput.alarmState)
+                if(KeyfobInput.alarmState){
+                    console.log("Keyfob: " + key_id + " Activated Alarm!");
+                    alarmTimer.running = true;
+                }else{
+                    console.log("Keyfob: " + key_id + " Deactivated Alarm!");
+                    alarmTimer.running = false;
                 }
             }
         }

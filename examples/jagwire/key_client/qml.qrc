@@ -8,5 +8,6 @@
         <file>high-beam.svg</file>
         <file>trunk.svg</file>
         <file>unlocked.svg</file>
+        <file>alarm.svg</file>
     </qresource>
 </RCC>

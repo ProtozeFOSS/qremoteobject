@@ -37,7 +37,7 @@ signals:
 
     CAR_TAG    void locksChanged(bool lock_state); // lock state change relayed to keyfobs
     CAR_TAG    void lightsChanged(bool light_state); // light state change relayed to keyfobs
-    CAR_TAG    void alarmChanged(bool light_state); // alarm state change relayed to keyfobs
+    CAR_TAG    void alarmChanged(bool alarm_state); // alarm state change relayed to keyfobs
     CAR_TAG    void trunkChanged(bool trunk_state); // alarm state change relayed to keyfobs
     CAR_TAG    void keyLockedOut(QString key_id,QString reason); // for flagging unauthorized keyfobs
     CAR_TAG    void fobConnected(QString key_id);

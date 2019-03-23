@@ -6,6 +6,8 @@ Window {
     visible: true
     property bool resizedHeight: false
     property bool resizedWidth: false
+    x:100
+    y:200
     width: 224
     height: 366
     title: qsTr("Hello Keyfob")

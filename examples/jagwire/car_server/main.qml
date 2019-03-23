@@ -4,6 +4,8 @@ import QtQuick.Controls 2.5
 Window {
     id:topWindow
     visible: true
+    x:500
+    y:200
     width: 546
     height: 243
     title: qsTr("Hello Car")

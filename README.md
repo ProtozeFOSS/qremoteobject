@@ -21,7 +21,7 @@ The QRemoteObject library looks to provide a method of defining remote objects (
    - see [RMOC latest](https://github.com/Tpimp/rmoc/tree/5.12)
 
 # To Build
-
+ - Edit your qobjectdef.h (or make a copy of the original and edit that one) as seen here [RemoteInvokeMetaMethod](https://github.com/ProtozeFOSS/qremoteobject/wiki/Missing-reference-to-RemoteInvokeMetaMethod)
  - Pull the repository
  - open either qremoteobject.qbs or one of the example's top level qbs file in Qt Creator.
  - build and (run if example) as usual

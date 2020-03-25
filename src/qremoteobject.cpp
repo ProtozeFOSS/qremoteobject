@@ -51,7 +51,7 @@ QJsonObject QRemoteObject::remoteReflection()
 
 
 
-void  QRemoteObject::qt_remote_metacall(QObject* obj, QMetaObject::Call _c, int _id, void ** _a)
+void QRemoteObject::qt_remote_metacall(QObject* obj, QMetaObject::Call _c, int _id, void ** _a)
 {
     QRemoteObject* robj = qobject_cast<QRemoteObject*>(obj);
      if(robj != nullptr){

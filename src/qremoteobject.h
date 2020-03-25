@@ -15,7 +15,7 @@
 #include <QJsonArray>
 #include "private/qremoteobject_p.h"
 
-class QREMOTEOBJECT_EXPORT  QRemoteObject : public QObject
+class QRemoteObject : public QObject
 {
     Q_OBJECT
     Q_ENUMS(RpcCall)

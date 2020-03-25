@@ -3,10 +3,14 @@
 #include <QJsonArray>
 #include <QMetaMethod>
 #include <QMetaObject>
-#if defined(QREMOTEOBJECT_LIBRARY)
-#  define QREMOTEOBJECT_EXPORT Q_DECL_EXPORT
+#ifdef BUILD_LIB
+#ifdef QREMOTEOBJECT_LIBRARY
+    #define QREMOTEOBJECT_EXPORT Q_DECL_EXPORT
 #else
-#  define QREMOTEOBJECT_EXPORT Q_DECL_IMPORT
+    #define QREMOTEOBJECT_EXPORT Q_DECL_IMPORT
+#endif
+#else
+#define QREMOTEOBJECT_EXPORT
 #endif
 
  // define the tag text as empty, so the compiler doesn't see it
